@@ -29,6 +29,7 @@ type DataTableProps<TData> = {
     search?: string | null
     sort?: string | null
   }
+  toolbarExtra?: React.ReactNode
 }
 
 export function DataTable<TData>({
@@ -38,11 +39,16 @@ export function DataTable<TData>({
   server,
   totalSelectedLabel = 'selected',
   searchPlaceholder = 'Search...',
+  toolbarExtra,
 }: DataTableProps<TData>) {
   const [rowSelection, setRowSelection] = React.useState({})
   const table = useReactTable({
     data,
     columns,
+    meta: {
+        page: meta.current_page,
+        per_page: meta.per_page,
+    },
     state: {
       rowSelection,
     },
@@ -61,6 +67,7 @@ export function DataTable<TData>({
         onSearch={server.onSearch}
         search={server.search ?? ''}
         placeholder={searchPlaceholder}
+        extraFilters={toolbarExtra}
       />
 
       <div className="rounded-md border">

@@ -42,8 +42,16 @@ class UserController extends Controller
         $sort    = $request->string('sort'); // "column:asc|desc"
         $perPage = (int) $request->integer('per_page', 10);
         $page    = (int) $request->integer('page', 1);
+        $role = $request->string('role');
 
         $query = User::query();
+
+        // Filter by role
+        $role = $request->string('role');
+        if ($role->isNotEmpty() && $role->toString() !== 'all') {
+            $query->where('role', $role->toString());
+        }
+
 
         // Search
         if ($search->isNotEmpty()) {
@@ -92,6 +100,8 @@ class UserController extends Controller
                 'sort'     => $sort->toString() ?: null,
                 'per_page' => $perPage,
                 'page'     => $users->currentPage(), // <- penting supaya frontend tahu current page
+                'role'     => $role->toString() ?: null,
+
             ],
         ]);
     }

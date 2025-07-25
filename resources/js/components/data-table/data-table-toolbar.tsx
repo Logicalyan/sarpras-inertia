@@ -16,7 +16,8 @@ interface DataTableToolbarProps<TData> {
   table: Table<TData>
   onSearch: (value: string) => void
   search: string
-  placeholder?: string
+  placeholder?: string,
+  extraFilters?: React.ReactNode
 }
 
 export function DataTableToolbar<TData>({
@@ -24,6 +25,7 @@ export function DataTableToolbar<TData>({
   onSearch,
   search,
   placeholder = 'Search...',
+  extraFilters,
 }: DataTableToolbarProps<TData>) {
   const [value, setValue] = React.useState(search ?? '')
 
@@ -41,6 +43,7 @@ export function DataTableToolbar<TData>({
         placeholder={placeholder}
         className="w-full max-w-sm"
       />
+      {extraFilters && <div className="flex items-center gap-2">{extraFilters}</div>}
 
       <DropdownMenu>
         <DropdownMenuTrigger asChild>

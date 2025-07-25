@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button'
 import AppLayout from '@/layouts/app-layout'
 import { type BreadcrumbItem } from '@/types'
 import { ExcelActionsDropdown } from '@/components/common/ExcelActionsDropdown'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 
 type Props = {
     users: {
@@ -22,6 +23,7 @@ type Props = {
         search?: string
         sort?: string | null
         per_page?: number
+        role?: string
     }
 }
 
@@ -37,11 +39,14 @@ export default function UsersIndex({ users, filters }: Props) {
             per_page: users.meta.per_page,
             search: filters.search ?? '',
             sort: filters.sort ?? '',
+            role: filters.role ?? '',
         },
         {
             resetPageOn: ['search', 'sort', 'per_page'],
         }
     )
+
+    const roleValue = current.role ?? undefined
 
 
     return (
@@ -81,6 +86,26 @@ export default function UsersIndex({ users, filters }: Props) {
                             onPerPageChange: (pp) => setPerPage(pp),
                             onSortChange: (s) => setSort(s),
                         }}
+                        toolbarExtra={
+
+                            <Select
+                                value={roleValue}
+                                onValueChange={(v) => {
+                                    const role = v === 'all' ? null : v
+                                    go({ role, page: 1 })
+                                }}
+                            >
+                                <SelectTrigger className="w-[140px]">
+                                    <SelectValue placeholder="All Roles" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="all">All Roles</SelectItem>   {/* <-- tidak kosong */}
+                                    <SelectItem value="admin">Admin</SelectItem>
+                                    <SelectItem value="user">User</SelectItem>
+                                </SelectContent>
+                            </Select>
+
+                        }
                     />
                 </div>
             </div>
